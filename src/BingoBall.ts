@@ -11,16 +11,16 @@ export class BingoBall extends LitElement {
 			position: relative;
 			width: 100%;
 			aspect-ratio: 1;
-			
+		}
+	
+		.circle {
 			color: black;
 			font-family: serif;
 			text-align: center;
 			font-weight: bold;
 			font-size: 14pt;
 			white-space: nowrap;
-		}
-	
-		.circle {
+
 			opacity: 0.2;
 			&.called {
 				opacity: 1;
@@ -40,10 +40,13 @@ export class BingoBall extends LitElement {
 			padding: 0.5em;
 			box-shadow: 5px 5px 10px 1px rgb(0 0 0 / 50%);
 			box-sizing: border-box;
+			
+			cursor: pointer;
+			user-select: none;
 		}
 	`;
 
-	@property()
+	@property({reflect: true, useDefault: true})
 	called: boolean = false;
 
 	@property()
@@ -52,9 +55,16 @@ export class BingoBall extends LitElement {
 	@property()
 	number: number = 1;
 
+	#setCalled(/* e: Event */): void {
+		this.called = true;
+	}
+
 	render() {
 		return html`
-		  <div class="circle ${classMap({'called': this.called})}">
+		  <div
+		    class="circle ${classMap({'called': this.called})}"
+		    @click=${this.#setCalled}
+		  >
 		    ${this.letter} ${this.number.toLocaleString()}
 		  </div>
 		`;

@@ -32,14 +32,14 @@ export class BingoCallBoard extends LitElement {
 	// @property()
 	// orientation: 'portrait' | 'landscape' = 'landscape';
 
-	firstUpdated() {
-		// pick a few numbers (TODO: REMOVE)
-		const b13 = this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]');
-		console.log('B13', b13);
-
-		// this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]')?.setAttribute('called', 'true');
-		b13?.setAttribute('called', 'true');
-	}
+	// firstUpdated() {
+	// 	// pick a few numbers (TODO: REMOVE)
+	// 	const b13 = this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]');
+	// 	console.log('B13', b13);
+	//
+	// 	// this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]')?.setAttribute('called', 'true');
+	// 	b13?.setAttribute('called', 'true');
+	// }
 
 	#renderRow(letter: TBingoLetter) {
 		const startingNumber = BingoService.getStartingNumber(letter);
