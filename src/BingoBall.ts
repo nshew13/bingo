@@ -7,8 +7,13 @@ import './ShapeSphere.ts';
 export class BingoBall extends LitElement {
 	static styles = css`
 		shape-sphere {
-			padding: 4px;
+		    --size: 4;
+		
 			color: black;
+			font-family: serif;
+			text-align: center;
+			font-weight: bold;
+			font-size: 14pt;
 		}
 	`;
 

@@ -1,4 +1,4 @@
 import './style.css'
 
-// import Lit custom elements
-import './BingoBall.ts';
+// import top-level Lit custom element(s)
+import './BingoCallBoard.ts';
