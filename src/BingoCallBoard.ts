@@ -1,5 +1,5 @@
 import {html, css, LitElement} from 'lit';
-import {customElement} from 'lit/decorators.js';
+import {customElement, property} from 'lit/decorators.js';
 import {map} from 'lit/directives/map.js';
 import {range} from 'lit/directives/range.js';
 import './BingoBall.ts';
@@ -13,17 +13,33 @@ export class BingoCallBoard extends LitElement {
 		:host {
 		    display: grid;
 		    grid-template-columns: repeat(15, 1fr);
-		    grid-template-rows: repeat(5, 1fr);
+		    grid-template-rows: repeat(6, 1fr);
 		    
 		    place-items: center;
 		    aspect-ratio: 16 / 9;
 		    border: 2px dashed red;
 		    width: 100vw;
 		}
+		
+		.table-label {
+			grid-column: 1 / span 15;
+		}
 	`;
+
+	@property()
+	label: string = 'BINGO';
 
 	// @property()
 	// orientation: 'portrait' | 'landscape' = 'landscape';
+
+	firstUpdated() {
+		// pick a few numbers (TODO: REMOVE)
+		const b13 = this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]');
+		console.log('B13', b13);
+
+		// this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]')?.setAttribute('called', 'true');
+		b13?.setAttribute('called', 'true');
+	}
 
 	#renderRow(letter: TBingoLetter) {
 		const startingNumber = BingoService.getStartingNumber(letter);
@@ -32,6 +48,7 @@ export class BingoCallBoard extends LitElement {
 
 	render() {
 		return html`
+		  	<span class="table-label">${this.label}</span>
 		  	${this.#renderRow('B')}
 			${this.#renderRow('I')}
 			${this.#renderRow('N')}
