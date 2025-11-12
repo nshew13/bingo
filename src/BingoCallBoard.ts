@@ -19,12 +19,26 @@ export class BingoCallBoard extends LitElement {
 		    
 		    place-items: center;
 		    aspect-ratio: 16 / 9;
-		    border: 2px dashed red;
+			box-shadow: 1px 1px 3px 0 rgb(0 0 0 / 30%);
 		    width: 100vw;
+			container-type: size;
+		}
+		
+		.table-header {
+			grid-column: 1 / span 15;
+			background-color: hsl(44 87 50);
+			color: black;
+			width: 100%;
+			height: 100%;
 		}
 		
 		.table-label {
-			grid-column: 1 / span 15;
+			padding: 0 0.5em;
+			
+			font-size: 14pt;
+			@container (height > 10px) {
+				font-size: max(14pt, 10cqb);
+			}
 		}
 	`;
 
@@ -59,7 +73,9 @@ export class BingoCallBoard extends LitElement {
 
 	render() {
 		return html`
-		  	<span class="table-label">${this.label}</span>
+		  	<div class="table-header">
+		  		<div class="table-label">${this.label}</div>
+            </div>
 		  	${this.#renderRow('B')}
 			${this.#renderRow('I')}
 			${this.#renderRow('N')}

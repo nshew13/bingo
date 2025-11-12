@@ -10,9 +10,9 @@ import './ShapeSphere.ts';
 export class BingoBall extends LitElement {
 	static styles = css`
 		:host {
-			position: relative;
 			width: 100%;
 			aspect-ratio: 1;
+			container-type: size;
 		}
 	
 		.circle {
@@ -21,16 +21,18 @@ export class BingoBall extends LitElement {
 			text-align: center;
 			font-weight: bold;
 			white-space: nowrap;
-			container-type: inline-size;
 			overflow: hidden;
-			font-size: clamp(8px, 4.5cqw, 22px);;
+			
+			font-size: 14pt;
+			@container (width > 10px) {
+				font-size: max(14pt, 30cqi);
+			}
 
 			opacity: 0.2;
 			&.called {
 				opacity: 1;
 			}
 
-			position: absolute;
 			display: flex;
 			flex-direction: column;
 			place-content: center;
