@@ -1,16 +1,22 @@
-import {BingoService} from './Bingo.service.ts';
-
 import './style.css'
 
 // import top-level Lit custom element(s)
 import './BingoCallBoard.ts';
-import type {TBingoLetter} from '../types/Bingo.ts';
 
-(() => {
+import {BingoService} from './Bingo.service.ts';
+import type {TBingoLetter} from '../types/Bingo.ts';
+import type {BingoCallBoard} from './BingoCallBoard.ts';
+
+document.addEventListener('DOMContentLoaded', () => {
 	let bingoLetter: TBingoLetter | undefined;
 	let bingoDigits: number[] = [];
+	const bingoBoard: BingoCallBoard | null = document.querySelector('bingo-call-board');
 
-	document.addEventListener('keypress', (e: KeyboardEvent) => {
+	if (!bingoBoard) {
+		console.error('bingo-call-board not found');
+	}
+
+	const handleBingoKeyedInput = (e: KeyboardEvent) => {
 		if (BingoService.RE_BINGO_LETTERS.test(e.key)) {
 			bingoLetter = e.key.toLocaleUpperCase() as TBingoLetter;
 			bingoDigits = [];
@@ -24,6 +30,8 @@ import type {TBingoLetter} from '../types/Bingo.ts';
 		/*
 		 * We have to make sure we don't fire on B1 when inputting B10-15.
 		 * That means we'll need to input a leading 0 for B1.
+		 * Alternatively, we could add a debounce or a requirement to
+		 * press Enter, but this works for now.
 		 */
 		let bingoNumber: number = 0;
 		if (bingoDigits.length === 2) {
@@ -32,14 +40,21 @@ import type {TBingoLetter} from '../types/Bingo.ts';
 			bingoNumber = bingoDigits[0];
 		}
 
-		if (bingoLetter &&
+		if (bingoBoard &&
+			bingoLetter &&
 			bingoNumber &&
 			BingoService.isValidCombo(bingoLetter, bingoNumber)
 		) {
-			console.log('heard', `${bingoLetter} ${bingoNumber}`);
-			// TODO: set bingo-ball called attr
+			bingoBoard.highlightBall(bingoLetter, bingoNumber);
 			bingoLetter = undefined;
 			bingoDigits = [];
 		}
-	});
-})()
+	};
+
+	/*
+	 * We can't bind this to BingoCallBoard. It won't work on non-inputs
+	 * without contentEditable="true", and we don't want that editable.
+	 * It does appear to work when bound to the document.
+	 */
+	document.addEventListener('keyup', handleBingoKeyedInput);
+});

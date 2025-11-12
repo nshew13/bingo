@@ -1,8 +1,10 @@
 import {html, css, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {classMap} from 'lit/directives/class-map.js';
 import type {TBingoLetter} from '../types/Bingo.ts';
+
 import './ShapeSphere.ts';
-import { classMap } from 'lit/directives/class-map.js';
+
 
 @customElement('bingo-ball')
 export class BingoBall extends LitElement {
@@ -18,8 +20,10 @@ export class BingoBall extends LitElement {
 			font-family: serif;
 			text-align: center;
 			font-weight: bold;
-			font-size: 14pt;
 			white-space: nowrap;
+			container-type: inline-size;
+			overflow: hidden;
+			font-size: clamp(8px, 4.5cqw, 22px);;
 
 			opacity: 0.2;
 			&.called {
@@ -55,7 +59,11 @@ export class BingoBall extends LitElement {
 	@property()
 	number: number = 1;
 
-	#setCalled(/* e: Event */): void {
+	#toggleHighlight (/* e: Event */): void {
+		this.called = !this.called;
+	}
+
+	highlightBall () {
 		this.called = true;
 	}
 
@@ -63,7 +71,7 @@ export class BingoBall extends LitElement {
 		return html`
 		  <div
 		    class="circle ${classMap({'called': this.called})}"
-		    @click=${this.#setCalled}
+		    @click=${this.#toggleHighlight}
 		  >
 		    ${this.letter} ${this.number.toLocaleString()}
 		  </div>

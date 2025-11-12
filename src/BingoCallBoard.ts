@@ -2,9 +2,11 @@ import {html, css, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {map} from 'lit/directives/map.js';
 import {range} from 'lit/directives/range.js';
-import './BingoBall.ts';
-import type {TBingoLetter} from '../types/Bingo.ts';
 import {BingoService} from './Bingo.service.ts';
+import type {TBingoLetter} from '../types/Bingo.ts';
+
+import './BingoBall.ts';
+import type {BingoBall} from './BingoBall.ts';
 
 
 @customElement('bingo-call-board')
@@ -44,6 +46,15 @@ export class BingoCallBoard extends LitElement {
 	#renderRow(letter: TBingoLetter) {
 		const startingNumber = BingoService.getStartingNumber(letter);
 		return html`${map(range(15), (i) => html`<bingo-ball letter="${letter}" number="${i + startingNumber}"><bingo-ball>`)}`;
+	}
+
+	highlightBall (bingoLetter: TBingoLetter, bingoNumber: number) {
+		if (BingoService.isValidCombo(bingoLetter, bingoNumber)) {
+			const ballEl = this.renderRoot.querySelector(`bingo-ball[letter="${bingoLetter}"][number="${bingoNumber}"]`);
+			if (ballEl) {
+				(ballEl as BingoBall).highlightBall();
+			}
+		}
 	}
 
 	render() {
