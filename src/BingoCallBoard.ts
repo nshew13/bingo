@@ -6,6 +6,7 @@ import {BingoService} from './Bingo.service.ts';
 import type {TBingoLetter} from '../types/Bingo.ts';
 
 import './BingoBall.ts';
+import './BingoBallOverlay.ts';
 import type {BingoBall} from './BingoBall.ts';
 
 
@@ -59,7 +60,8 @@ export class BingoCallBoard extends LitElement {
 
 	#renderRow(letter: TBingoLetter) {
 		const startingNumber = BingoService.getStartingNumber(letter);
-		return html`${map(range(15), (i) => html`<bingo-ball letter="${letter}" number="${i + startingNumber}"><bingo-ball>`)}`;
+		const count = range(BingoService.getEndingNumber(letter) - startingNumber + 1);
+		return html`${map(count, (i) => html`<bingo-ball letter="${letter}" number="${i + startingNumber}"><bingo-ball>`)}`;
 	}
 
 	highlightBall (bingoLetter: TBingoLetter, bingoNumber: number) {
@@ -73,6 +75,7 @@ export class BingoCallBoard extends LitElement {
 
 	render() {
 		return html`
+		  	<bingo-ball-overlay></bingo-ball-overlay>
 		  	<div class="table-header">
 		  		<div class="table-label">${this.label}</div>
             </div>

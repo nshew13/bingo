@@ -37,6 +37,10 @@ const BINGO_MAP: TBingoMap = {
 export class BingoService {
 	static readonly RE_BINGO_LETTERS = /[BINGO]/i;
 
+	static getEndingNumber (letter: TBingoLetter): number {
+		return BINGO_MAP[letter].end;
+	}
+
 	static getStartingNumber (letter: TBingoLetter): number {
 		return BINGO_MAP[letter].start;
 	}

@@ -10,12 +10,24 @@ import './ShapeSphere.ts';
 export class BingoBall extends LitElement {
 	static styles = css`
 		:host {
+			display: flex;
+			flex-direction: column;
+			place-content: center;
 			width: 100%;
 			aspect-ratio: 1;
 			container-type: size;
 		}
+		
+		:host([fit-height]) {
+			width: unset;
+			flex-direction: row;
+			height: 100%;
+		}
 	
 		.circle {
+			display: block;
+			margin: auto;
+			
 			color: black;
 			font-family: serif;
 			text-align: center;
@@ -61,7 +73,16 @@ export class BingoBall extends LitElement {
 	@property()
 	number: number = 1;
 
-	#toggleHighlight (/* e: Event */): void {
+	// @state()
+	// private _animationShown = false;
+	//
+	// private animateHighlight (/* e: Event */): void {
+	// 	if (!this._animationShown) {
+	// 		this._animationShown = true;
+	// 	}
+	// }
+
+	private toggleHighlight (/* e: Event */): void {
 		this.called = !this.called;
 	}
 
@@ -73,7 +94,7 @@ export class BingoBall extends LitElement {
 		return html`
 		  <div
 		    class="circle ${classMap({'called': this.called})}"
-		    @click=${this.#toggleHighlight}
+		    @click=${this.toggleHighlight}
 		  >
 		    ${this.letter} ${this.number.toLocaleString()}
 		  </div>
