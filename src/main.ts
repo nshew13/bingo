@@ -11,6 +11,7 @@ import './BingoCallBoard.ts';
 document.addEventListener('DOMContentLoaded', () => {
 	let bingoLetter: TBingoLetter | undefined;
 	let bingoDigits: TBingoNumber[] = [];
+	// noinspection CssInvalidHtmlTagReference
 	const bingoBoard: BingoCallBoard | null = document.querySelector('bingo-call-board');
 
 	if (!bingoBoard) {
@@ -47,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			BingoService.isValidCombo(bingoLetter, bingoNumber)
 		) {
 			console.debug('keyboard input', bingoLetter, bingoNumber);
-			// TODO: use BingoSelection.update instead
 			bingoBoard.highlightBall(bingoLetter, bingoNumber);
 			bingoLetter = undefined;
 			bingoDigits = [];

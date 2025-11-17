@@ -59,8 +59,7 @@ export class BingoCallBoard extends LitElement {
 	}
 
 	highlightBall (bingoLetter: TBingoLetter, bingoNumber: TBingoNumber) {
-		if (BingoService.isValidCombo(bingoLetter, bingoNumber)) {
-			this._bingoSelection.update(bingoLetter, bingoNumber);
+		if (this._bingoSelection.update(bingoLetter, bingoNumber)) {
 			const ballEl = this.renderRoot.querySelector(`bingo-ball[letter="${bingoLetter}"][number="${bingoNumber}"]`);
 			if (ballEl) {
 				(ballEl as BingoBall).highlightBall();

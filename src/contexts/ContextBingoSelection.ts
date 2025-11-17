@@ -34,7 +34,10 @@ export class BingoSelection {
 			this._bingoLetter = letter;
 			this._bingoNumber = number;
 			window.dispatchEvent(new Event(BingoSelection.EVENT_NAME_SELECTION_UPDATED));
+			return true;
 		}
+
+		return false;
 	}
 }
 
