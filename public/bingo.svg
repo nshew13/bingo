@@ -1,0 +1,118 @@
+<!-- originally created in Inkscape -->
+<svg
+        width="300"
+        height="300"
+        viewBox="0 0 79.374998 79.375"
+        version="1.1"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns="http://www.w3.org/2000/svg"
+>
+    <defs id="defs2">
+        <linearGradient id="linearGradient_white-to-black">
+            <stop
+                    style="stop-color:#ffffff;stop-opacity:1;"
+                    offset="0.5"
+            />
+            <stop
+                    style="stop-color:#000000;stop-opacity:1;"
+                    offset="1"
+            />
+        </linearGradient>
+        <radialGradient
+                xlink:href="#linearGradient_white-to-black"
+                id="radialGradient_sphere"
+                cx="45.008888"
+                cy="30.470583"
+                fx="45.008888"
+                fy="30.470583"
+                r="37.367323"
+                gradientUnits="userSpaceOnUse"
+                gradientTransform="matrix(2.173833,0,0,2.173833,-46.586495,-46.586495)"
+        />
+
+        <!-- drop shadow -->
+        <filter
+                id="filter_drop-shadow"
+                style="color-interpolation-filters:sRGB;"
+                x="-0.13085281"
+                y="-0.13085281"
+                width="1.2889666"
+                height="1.2889666"
+        >
+            <feFlood
+                    flood-opacity="0.498039"
+                    flood-color="rgb(0,0,0)"
+                    result="flood"
+            />
+            <feComposite
+                    in="flood"
+                    in2="SourceGraphic"
+                    operator="in"
+                    result="composite1"
+            />
+            <feGaussianBlur
+                    in="composite1"
+                    stdDeviation="2"
+                    result="blur"
+            />
+            <feOffset
+                    dx="1"
+                    dy="1"
+                    result="offset"
+            />
+            <feComposite
+                    in="SourceGraphic"
+                    in2="offset"
+                    operator="over"
+                    result="fbSourceGraphic"
+            />
+            <feColorMatrix
+                    result="fbSourceGraphicAlpha"
+                    in="fbSourceGraphic"
+                    values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+            />
+            <feFlood
+                    flood-opacity="0.498039"
+                    flood-color="rgb(0,0,0)"
+                    result="flood"
+                    in="fbSourceGraphic"
+            />
+            <feComposite
+                    in2="fbSourceGraphic"
+                    in="flood"
+                    operator="in"
+                    result="composite1"
+            />
+            <feGaussianBlur
+                    in="composite1"
+                    stdDeviation="2"
+                    result="blur"
+            />
+            <feOffset
+                    dx="1"
+                    dy="1"
+                    result="offset"
+            />
+            <feComposite
+                    in2="offset"
+                    in="fbSourceGraphic"
+                    operator="over"
+                    result="composite2"
+            />
+        </filter>
+    </defs>
+    <circle
+            style="fill:url(#radialGradient_sphere); fill-opacity:1; stroke:none; filter:url(#filter_drop-shadow)"
+            cx="39.6875"
+            cy="39.6875"
+            r="36.682438"
+    />
+    <text
+            style="font-weight:bold; font-size:20px; line-height:0.9; font-family:serif; text-align:center; text-anchor:middle; fill:black; stroke:none;"
+            x="39.966167"
+            y="47.066872"
+            id="text2516"
+    >
+        BINGO
+    </text>
+</svg>
