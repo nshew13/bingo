@@ -56,7 +56,6 @@ export class BingoBall extends LitElement {
 			box-sizing: border-box;
 			
 			cursor: pointer;
-			user-select: none;
 		}
 	`;
 
@@ -73,7 +72,7 @@ export class BingoBall extends LitElement {
 	@property()
 	number!: TBingoNumber;
 
-	private toggleHighlight (/* e: Event */): void {
+	private toggleHighlight () {
 		if (!this.called) {
 			this._bingoSelection.update(this.letter, this.number);
 		}

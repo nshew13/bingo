@@ -12,15 +12,34 @@ export class BingoBallOverlay extends LitElement {
 	private static readonly DISPLAY_DURATION_MS = 4_000;
 
 	static styles = css`
-		:host {
+		:host, .bingo-overlay-container {
 			position: absolute;
 			aspect-ratio: inherit;
 			width: 100%;
+			z-index: 10;
+		}
+		
+		/*
+		 * We can't conditionally render the host element ('bingo-ball-overlay'),
+		 * so we have to allow pointer events (i.e., click) to pass through to lower
+		 * elements.
+		 *
+		 * In order to allow clicks on the overlay, we have .bingo-overlay-container,
+		 * which has the same dimensions as the host, but captures clicks. It is toggled
+		 * in the render method based on the _showOverlay prop.
+		 *
+		 * N.B.: If we stopPropagation on the bingo-ball, we won't hear the click
+		 *       event here.
+		 */
+		:host {
+			pointer-events: none;
+		}
+		.bingo-overlay-container {
+			pointer-events: auto;
 		}
 			
 		.bingo-overlay {
 			position: absolute;
-			z-index: 10;
 			inset: 0;
 			
 			display: flex;
@@ -72,15 +91,17 @@ export class BingoBallOverlay extends LitElement {
 	render() {
 		return this._showOverlay
 			? html`
-	          <div class="bingo-overlay" @click=${this.hide}>
-		          <div class="center-square">
-		            <bingo-ball
-		              called
-		              letter="${this._bingoSelection.letter}"
-		              number="${this._bingoSelection.number}"
-		            ></bingo-ball>
-		          </div>
-	          </div>
+	            <div class="bingo-overlay-container">
+	              <div class="bingo-overlay" @click=${this.hide}>
+	                <div class="center-square">
+	                  <bingo-ball
+	                    called
+	                    letter="${this._bingoSelection.letter}"
+	                    number="${this._bingoSelection.number}"
+	                  ></bingo-ball>
+	                </div>
+	              </div>
+	            </div>
 			`
 			: nothing
 		;
