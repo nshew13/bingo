@@ -25,11 +25,13 @@ export class BingoCallBoard extends LitElement {
 			box-shadow: 1px 1px 3px 0 rgb(0 0 0 / 30%);
 		    width: 100vw;
 			container-type: size;
+			
+			--theme-color-hsl-gold: hsl(44 87 50)
 		}
 		
 		.table-header {
 			grid-column: 1 / span 15;
-			background-color: hsl(44 87 50);
+			background-color: var(--theme-color-hsl-gold);
 			color: black;
 			width: 100%;
 			height: 100%;

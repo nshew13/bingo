@@ -65,6 +65,9 @@ export class BingoBall extends LitElement {
 	@property({reflect: true, type: Boolean, useDefault: true})
 	called: boolean = false;
 
+	@property({type: Boolean, useDefault: true})
+	inactive: boolean = false;
+
 	@property()
 	letter!: TBingoLetter;
 
@@ -72,10 +75,12 @@ export class BingoBall extends LitElement {
 	number!: TBingoNumber;
 
 	private toggleHighlight () {
-		if (!this.called) {
-			this._bingoSelection.update(this.letter, this.number);
+		if (!this.inactive) {
+			if (!this.called) {
+				this._bingoSelection.update(this.letter, this.number);
+			}
+			this.called = !this.called;
 		}
-		this.called = !this.called;
 	}
 
 	highlightBall () {

@@ -96,6 +96,7 @@ export class BingoBallOverlay extends LitElement {
 	                <div class="center-square">
 	                  <bingo-ball
 	                    called
+	                    inactive
 	                    letter="${this._bingoSelection.letter}"
 	                    number="${this._bingoSelection.number}"
 	                  ></bingo-ball>
