@@ -1,6 +1,7 @@
-import {html, css, LitElement, nothing} from 'lit';
+import {html, css, LitElement} from 'lit';
 import {consume} from '@lit/context';
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, query, state} from 'lit/decorators.js';
+import {classMap} from 'lit/directives/class-map.js';
 import {BingoSelection, ContextBingoSelection} from './contexts/ContextBingoSelection.ts';
 
 import './BingoBall.ts';
@@ -9,7 +10,8 @@ import './ShapeSphere.ts';
 
 @customElement('bingo-ball-overlay')
 export class BingoBallOverlay extends LitElement {
-	private static readonly DISPLAY_DURATION_MS = 4_000;
+	private static readonly DURATION_DISPLAY_MS = 4_000;
+	private static readonly DURATION_TRANSITION_MS = 200;
 
 	static styles = css`
 		:host, .bingo-overlay-container {
@@ -36,11 +38,20 @@ export class BingoBallOverlay extends LitElement {
 		}
 		.bingo-overlay-container {
 			pointer-events: auto;
+			display: none;
+			
+			&.show {
+				display: block;
+			}
 		}
 			
 		.bingo-overlay {
+		    transition: opacity ${BingoBallOverlay.DURATION_TRANSITION_MS}ms ease-in-out;
+
 			position: absolute;
 			inset: 0;
+			opacity: 0;
+			background-color: var(--theme-color-hsl-gold);
 			
 			display: flex;
 		    place-content: center;
@@ -58,30 +69,85 @@ export class BingoBallOverlay extends LitElement {
 	@state()
 	private _showOverlay = false;
 
-	private _timeoutID: ReturnType<typeof setTimeout> | undefined;
+	@query('.bingo-overlay')
+	private _overlayElement!: HTMLDivElement;
 
-	constructor() {
+	protected readonly calculatedDisplayDuration!: number;
+	private _timeoutIDs: Array<ReturnType<typeof setTimeout>> = [];
+
+	constructor () {
 		super();
 
-		// listen for changes to BingoSelection
-		window.addEventListener(BingoSelection.EVENT_NAME_SELECTION_UPDATED, () => {
-			this.hide();
-			this.show();
-			// this.requestUpdate() is unnecessary here because we modified _showOverlay.
+		this.calculatedDisplayDuration = BingoBallOverlay.DURATION_DISPLAY_MS - BingoBallOverlay.DURATION_TRANSITION_MS * 2;
 
-			this._timeoutID = setTimeout(() => {
+		// listen for changes to BingoSelection
+		// this.requestUpdate() is unnecessary here because we modified _showOverlay.
+		window.addEventListener(BingoSelection.EVENT_NAME_SELECTION_UPDATED, () => this.handleSelectionChange());
+	}
+
+	disconnectedCallback () {
+		window.removeEventListener(BingoSelection.EVENT_NAME_SELECTION_UPDATED, () => this.handleSelectionChange());
+		this._timeoutIDs.forEach(id => clearTimeout(id));
+	}
+
+	firstUpdated () {
+		/*
+		 * N.B.: The _overlayElement is unavailable to handleTransitionEnd if it is
+		 *       used directly, rather than called from the arrow function.
+		 */
+		this._overlayElement.addEventListener('transitioncancel', (event: TransitionEvent) => this.handleTransitionEnd(event));
+		this._overlayElement.addEventListener('transitionend',    (event: TransitionEvent) => this.handleTransitionEnd(event));
+	}
+
+	willUpdate (changedProperties: Map<string, unknown>) {
+		if (this._overlayElement) {
+			// N.B.: changedProperties holds the previous value
+			if (changedProperties.get('_showOverlay') === false) {
+				setTimeout(() => {
+					this._overlayElement.style.setProperty('opacity', '1');
+				}, 0);
+			}
+		}
+	}
+
+	private handleClick () {
+		this.hide();
+	}
+
+	private handleSelectionChange () {
+		const currentlyShowing = this._showOverlay || this._overlayElement.style.getPropertyValue('opacity') === '1';
+		this.hide();
+
+		if (currentlyShowing) {
+			this._timeoutIDs.push(setTimeout(() => {
+				this.show();
+			}, BingoBallOverlay.DURATION_TRANSITION_MS));
+		} else {
+			this.show();
+		}
+	}
+
+	private handleTransitionEnd (event: TransitionEvent) {
+		if (event.propertyName === 'opacity') {
+			if (this._overlayElement.style.getPropertyValue('opacity') === '1') {
+				this._timeoutIDs.push(setTimeout(() => {
+					this._overlayElement.style.setProperty('opacity', '0');
+				}, this.calculatedDisplayDuration));
+			}
+
+			this._timeoutIDs.push(setTimeout(() => {
 				this.hide();
-			}, BingoBallOverlay.DISPLAY_DURATION_MS);
-		});
+			}, BingoBallOverlay.DURATION_DISPLAY_MS));
+		}
 	}
 
 	hide () {
 		this._showOverlay = false;
-		if (this._timeoutID) {
-			clearTimeout(this._timeoutID);
-			this._timeoutID = undefined;
+		this._overlayElement.style.setProperty('opacity', '0');
+		if (this._timeoutIDs.length > 0) {
+			this._timeoutIDs.forEach(id => clearTimeout(id));
+			this._timeoutIDs = [];
 		}
-		// TODO: emit event to highlight new selection's ball
 	}
 
 	show () {
@@ -89,22 +155,19 @@ export class BingoBallOverlay extends LitElement {
 	}
 
 	render() {
-		return this._showOverlay
-			? html`
-	            <div class="bingo-overlay-container">
-	              <div class="bingo-overlay" @click=${this.hide}>
-	                <div class="center-square">
-	                  <bingo-ball
-	                    called
-	                    inactive
-	                    letter="${this._bingoSelection.letter}"
-	                    number="${this._bingoSelection.number}"
-	                  ></bingo-ball>
-	                </div>
-	              </div>
-	            </div>
-			`
-			: nothing
-		;
+		return html`
+          <div class="bingo-overlay-container ${classMap({'show': this._showOverlay})}">
+            <div class="bingo-overlay" @click=${this.handleClick}>
+              <div class="center-square">
+                <bingo-ball
+                  called
+                  inactive
+                  letter="${this._bingoSelection.letter}"
+                  number="${this._bingoSelection.number}"
+                ></bingo-ball>
+              </div>
+            </div>
+          </div>
+		`;
 	}
 }
