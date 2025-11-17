@@ -5,8 +5,6 @@ import {classMap} from 'lit/directives/class-map.js';
 import {BingoSelection, ContextBingoSelection} from './contexts/ContextBingoSelection.ts';
 import type {TBingoLetter, TBingoNumber} from '../types/Bingo.ts';
 
-import './ShapeSphere.ts';
-
 
 @customElement('bingo-ball')
 export class BingoBall extends LitElement {

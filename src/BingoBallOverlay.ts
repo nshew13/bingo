@@ -5,7 +5,6 @@ import {classMap} from 'lit/directives/class-map.js';
 import {BingoSelection, ContextBingoSelection} from './contexts/ContextBingoSelection.ts';
 
 import './BingoBall.ts';
-import './ShapeSphere.ts';
 
 
 @customElement('bingo-ball-overlay')
