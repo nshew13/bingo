@@ -21,7 +21,6 @@ export class BingoBall extends LitElement {
 		}
 	
 		.circle {
-			display: block;
 			margin: auto;
 			
 			color: black;
@@ -31,10 +30,11 @@ export class BingoBall extends LitElement {
 			white-space: nowrap;
 			overflow: hidden;
 			
-			font-size: 14pt;
+			font-size: 16pt;
 			@container (width > 10px) {
-				font-size: max(14pt, 30cqi);
+				font-size: max(16pt, 35cqi);
 			}
+			line-height: 1;
 
 			opacity: 0.2;
 			&.called {
@@ -51,7 +51,6 @@ export class BingoBall extends LitElement {
 			aspect-ratio: 1;
 			width: 90%;
 			height: 90%;
-			padding: 0.5em;
 			box-shadow: 5px 5px 10px 1px rgb(0 0 0 / 50%);
 			box-sizing: border-box;
 			
@@ -90,7 +89,8 @@ export class BingoBall extends LitElement {
 			    class="circle ${classMap({'called': this.called})}"
 			    @click=${this.toggleHighlight}
 			  >
-			    ${this.letter} ${this.number?.toLocaleString()}
+			    <span>${this.letter}</span>
+                <span>${this.number?.toLocaleString()}</span>
 			  </div>
 			`
 			: nothing
