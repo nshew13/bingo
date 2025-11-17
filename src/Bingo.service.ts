@@ -1,8 +1,8 @@
-import type {TBingoLetter} from '../types/Bingo.ts';
+import type {TBingoLetter, TBingoNumber} from '../types/Bingo.ts';
 
 interface IBingoOffset {
-	start: number;
-	end: number;
+	start: TBingoNumber;
+	end: TBingoNumber;
 }
 
 type TBingoMap = {
@@ -37,15 +37,15 @@ const BINGO_MAP: TBingoMap = {
 export class BingoService {
 	static readonly RE_BINGO_LETTERS = /[BINGO]/i;
 
-	static getEndingNumber (letter: TBingoLetter): number {
+	static getEndingNumber (letter: TBingoLetter): TBingoNumber {
 		return BINGO_MAP[letter].end;
 	}
 
-	static getStartingNumber (letter: TBingoLetter): number {
+	static getStartingNumber (letter: TBingoLetter): TBingoNumber {
 		return BINGO_MAP[letter].start;
 	}
 
-	static isValidCombo (letter: TBingoLetter, number: number): boolean {
+	static isValidCombo (letter: TBingoLetter, number: TBingoNumber): boolean {
 		return number >= BINGO_MAP[letter].start && number <= BINGO_MAP[letter].end;
 	}
 }

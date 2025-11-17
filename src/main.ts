@@ -1,15 +1,16 @@
+import {BingoService} from './Bingo.service.ts';
+import type {TBingoLetter, TBingoNumber} from '../types/Bingo.ts';
+import type {BingoCallBoard} from './BingoCallBoard.ts';
+
 import './style.css'
 
 // import top-level Lit custom element(s)
 import './BingoCallBoard.ts';
 
-import {BingoService} from './Bingo.service.ts';
-import type {TBingoLetter} from '../types/Bingo.ts';
-import type {BingoCallBoard} from './BingoCallBoard.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
 	let bingoLetter: TBingoLetter | undefined;
-	let bingoDigits: number[] = [];
+	let bingoDigits: TBingoNumber[] = [];
 	const bingoBoard: BingoCallBoard | null = document.querySelector('bingo-call-board');
 
 	if (!bingoBoard) {
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * Alternatively, we could add a debounce or a requirement to
 		 * press Enter, but this works for now.
 		 */
-		let bingoNumber: number = 0;
+		let bingoNumber: TBingoNumber = 0;
 		if (bingoDigits.length === 2) {
 			bingoNumber = bingoDigits[0] * 10 + bingoDigits[1];
 		} else if (bingoDigits.length === 1 && bingoDigits[0] !== 1) {
@@ -45,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			bingoNumber &&
 			BingoService.isValidCombo(bingoLetter, bingoNumber)
 		) {
+			console.debug('keyboard input', bingoLetter, bingoNumber);
+			// TODO: use BingoSelection.update instead
 			bingoBoard.highlightBall(bingoLetter, bingoNumber);
 			bingoLetter = undefined;
 			bingoDigits = [];

@@ -1,7 +1,9 @@
-import {html, css, LitElement} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {html, css, LitElement, nothing} from 'lit';
+import {consume} from '@lit/context';
+import {customElement, property, state} from 'lit/decorators.js';
 import {classMap} from 'lit/directives/class-map.js';
-import type {TBingoLetter} from '../types/Bingo.ts';
+import {BingoSelection, ContextBingoSelection} from './contexts/ContextBingoSelection.ts';
+import type {TBingoLetter, TBingoNumber} from '../types/Bingo.ts';
 
 import './ShapeSphere.ts';
 
@@ -16,12 +18,6 @@ export class BingoBall extends LitElement {
 			width: 100%;
 			aspect-ratio: 1;
 			container-type: size;
-		}
-		
-		:host([fit-height]) {
-			width: unset;
-			flex-direction: row;
-			height: 100%;
 		}
 	
 		.circle {
@@ -64,25 +60,23 @@ export class BingoBall extends LitElement {
 		}
 	`;
 
-	@property({reflect: true, useDefault: true})
+	@consume({context: ContextBingoSelection})
+	@state()
+	private _bingoSelection!: BingoSelection;
+
+	@property({reflect: true, type: Boolean, useDefault: true})
 	called: boolean = false;
 
 	@property()
-	letter: TBingoLetter = 'B';
+	letter!: TBingoLetter;
 
 	@property()
-	number: number = 1;
-
-	// @state()
-	// private _animationShown = false;
-	//
-	// private animateHighlight (/* e: Event */): void {
-	// 	if (!this._animationShown) {
-	// 		this._animationShown = true;
-	// 	}
-	// }
+	number!: TBingoNumber;
 
 	private toggleHighlight (/* e: Event */): void {
+		if (!this.called) {
+			this._bingoSelection.update(this.letter, this.number);
+		}
 		this.called = !this.called;
 	}
 
@@ -91,13 +85,16 @@ export class BingoBall extends LitElement {
 	}
 
 	render() {
-		return html`
-		  <div
-		    class="circle ${classMap({'called': this.called})}"
-		    @click=${this.toggleHighlight}
-		  >
-		    ${this.letter} ${this.number.toLocaleString()}
-		  </div>
-		`;
+		return (this.letter && this.number)
+			? html`
+			  <div
+			    class="circle ${classMap({'called': this.called})}"
+			    @click=${this.toggleHighlight}
+			  >
+			    ${this.letter} ${this.number?.toLocaleString()}
+			  </div>
+			`
+			: nothing
+		;
 	}
 }

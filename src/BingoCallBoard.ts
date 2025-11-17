@@ -1,9 +1,11 @@
 import {html, css, LitElement} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {provide} from '@lit/context';
+import {customElement, property, state} from 'lit/decorators.js';
 import {map} from 'lit/directives/map.js';
 import {range} from 'lit/directives/range.js';
+import {BingoSelection, ContextBingoSelection} from './contexts/ContextBingoSelection.ts';
 import {BingoService} from './Bingo.service.ts';
-import type {TBingoLetter} from '../types/Bingo.ts';
+import type {TBingoLetter, TBingoNumber} from '../types/Bingo.ts';
 
 import './BingoBall.ts';
 import './BingoBallOverlay.ts';
@@ -46,26 +48,19 @@ export class BingoCallBoard extends LitElement {
 	@property()
 	label: string = 'BINGO';
 
-	// @property()
-	// orientation: 'portrait' | 'landscape' = 'landscape';
+	@provide({context: ContextBingoSelection})
+	@state()
+	private _bingoSelection = new BingoSelection();
 
-	// firstUpdated() {
-	// 	// pick a few numbers (TODO: REMOVE)
-	// 	const b13 = this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]');
-	// 	console.log('B13', b13);
-	//
-	// 	// this.renderRoot?.querySelector('bingo-ball[letter="B"][number="13"]')?.setAttribute('called', 'true');
-	// 	b13?.setAttribute('called', 'true');
-	// }
-
-	#renderRow(letter: TBingoLetter) {
+	private renderRow(letter: TBingoLetter) {
 		const startingNumber = BingoService.getStartingNumber(letter);
 		const count = range(BingoService.getEndingNumber(letter) - startingNumber + 1);
 		return html`${map(count, (i) => html`<bingo-ball letter="${letter}" number="${i + startingNumber}"><bingo-ball>`)}`;
 	}
 
-	highlightBall (bingoLetter: TBingoLetter, bingoNumber: number) {
+	highlightBall (bingoLetter: TBingoLetter, bingoNumber: TBingoNumber) {
 		if (BingoService.isValidCombo(bingoLetter, bingoNumber)) {
+			this._bingoSelection.update(bingoLetter, bingoNumber);
 			const ballEl = this.renderRoot.querySelector(`bingo-ball[letter="${bingoLetter}"][number="${bingoNumber}"]`);
 			if (ballEl) {
 				(ballEl as BingoBall).highlightBall();
@@ -79,11 +74,11 @@ export class BingoCallBoard extends LitElement {
 		  	<div class="table-header">
 		  		<div class="table-label">${this.label}</div>
             </div>
-		  	${this.#renderRow('B')}
-			${this.#renderRow('I')}
-			${this.#renderRow('N')}
-			${this.#renderRow('G')}
-			${this.#renderRow('O')}
+		  	${this.renderRow('B')}
+			${this.renderRow('I')}
+			${this.renderRow('N')}
+			${this.renderRow('G')}
+			${this.renderRow('O')}
 		`;
 	}
 }
