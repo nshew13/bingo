@@ -73,7 +73,7 @@ export class BingoCallBoard extends LitElement {
 		return html`
 		  	<bingo-ball-overlay></bingo-ball-overlay>
 		  	<div class="table-header">
-		  		<div class="table-label">${this.label}</div>
+		  		<div class="table-label" contenteditable="true">${this.label}</div>
             </div>
 		  	${this.renderRow('B')}
 			${this.renderRow('I')}
