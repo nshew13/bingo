@@ -19,11 +19,11 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
       vite:
-        specifier: ^7.3.5
-        version: 7.3.5
+        specifier: ^7.3.7
+        version: 7.3.7
       vite-plugin-singlefile:
         specifier: ^2.3.0
-        version: 2.3.0(rollup@4.62.0)(vite@7.3.5)
+        version: 2.3.0(rollup@4.62.0)(vite@7.3.7)
 
 packages:
 
@@ -429,8 +429,8 @@ packages:
       rollup: ^4.44.1
       vite: ^5.4.11 || ^6.0.0 || ^7.0.0
 
-  vite@7.3.5:
-    resolution: {integrity: sha512-KuOaNhcnGFN2zIPGA7wRmzF+lJA1sea7rHq17aiJ++9lzY1WWG6Jpwqwe1KNbRVPIqHmr8GLYx7jbrQcN/7/ww==}
+  vite@7.3.7:
+    resolution: {integrity: sha512-AHEzTORMbi7/7aXp7w7KZ5+DCUdSeLsJz0grY8xHpc9DHdYb0vQu6DqJfm2tOw3gDExNgPgnJTXxM6syYFHaCA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -763,13 +763,13 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  vite-plugin-singlefile@2.3.0(rollup@4.62.0)(vite@7.3.5):
+  vite-plugin-singlefile@2.3.0(rollup@4.62.0)(vite@7.3.7):
     dependencies:
       micromatch: 4.0.8
       rollup: 4.62.0
-      vite: 7.3.5
+      vite: 7.3.7
 
-  vite@7.3.5:
+  vite@7.3.7:
     dependencies:
       esbuild: 0.27.7
       fdir: 6.5.0(picomatch@4.0.4)
